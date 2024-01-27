@@ -1,9 +1,9 @@
-module com.example.beersenterpriseproject1 {
+module beerspurchasingapp {
     requires javafx.controls;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
 
-    opens com.example.beersenterpriseproject1 to javafx.fxml;
-    exports com.example.beersenterpriseproject1;
+    opens beerspurchasingapp to javafx.fxml;
+    exports beerspurchasingapp;
 }
