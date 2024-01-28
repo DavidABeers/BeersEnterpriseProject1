@@ -23,12 +23,16 @@ public class ShoppingController{
     public Label labelItemQuantity;
     public Label labelItemDetails;
 
+    // the concatenated details text for all cart items
     public String[] cartDescription = new String[5];
     //public String currentItemDesc;
     InventoryItem currentItem;
     public int itemNum = 1;
+
+    // for appending to details text
     String discount = "0%";
 
+    // tracks the total price of the current cart.
     public float total = 0;
     @FXML
     Label cartLabel;
@@ -37,6 +41,7 @@ public class ShoppingController{
     public TextField subtotalText;
     Dialog<String> dialog = new Dialog<>();
 
+    // edits the title and content of dialog, allowing only one to be declared.
     public void setDialog(String title, String content){
         dialog.setTitle(title);
         dialog.setContentText(content);
@@ -90,6 +95,7 @@ public class ShoppingController{
     @FXML
     private Button closeApp;
 
+    // sets the string discount and returns the equivalent multiplier as a double
     public double calculateDiscount(int qty){
         double priceMult = 1;
         if(qty>4 && qty<10){
@@ -123,7 +129,7 @@ public class ShoppingController{
             currentItem = item;
             int qty = Integer.parseInt(quantityText.getText());
             double priceMult = calculateDiscount(qty);
-            cartDescription[itemNum-1] = item.getItemID() + " " + item.getItemDescription() + " " + item.getPrice() + " " + qty + " " + discount + " ";
+            cartDescription[itemNum-1] = item.getItemID() + ", " + item.getItemDescription() + ", " + item.getPrice() + ", " + qty + ", " + discount + ", ";
             detailsText.setText(cartDescription[itemNum-1]+priceFormatter.format((item.getPrice()*priceMult*Integer.parseInt(quantityText.getText()))));
             addToCart.setDisable(false);
             viewCart.setDisable(false);
@@ -146,6 +152,7 @@ public class ShoppingController{
             dialog.showAndWait();
         }
         else{
+            // I know there's a better way to do this, but I'm too lazy to implement it.
             switch(itemNum){
                 case 2:
                     cartItem2.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
@@ -176,6 +183,7 @@ public class ShoppingController{
             total+= currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))*Integer.parseInt(quantityText.getText());
             cartDescription[itemNum-1] = cartDescription[itemNum-1] + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText())));
             itemIDText.setText("");
+            // default quantity text is 1 to avoid null, it's also the minimum someone could order.
             quantityText.setText("1");
             addToCart.setDisable(true);
             cartLabel.setText(itemNum + " item(s) in cart");
@@ -202,6 +210,7 @@ public class ShoppingController{
         dialog.showAndWait();
     }
 
+    // resets the UI. Doesn't currently need to be separate from actionEmptyCart, but was formerly used elsewhere.
     public void clearUI(){
         cartItem1.setText("");
         cartItem2.setText("");
@@ -210,6 +219,8 @@ public class ShoppingController{
         cartItem5.setText("");
         detailsText.setText("");
         cartLabel.setText("Your Cart is Empty");
+        subtotalText.setText("");
+        quantityText.setText("1");
         itemNum = 1;
         updateUINumbers();
     }

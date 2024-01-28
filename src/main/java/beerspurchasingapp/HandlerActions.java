@@ -1,3 +1,9 @@
+/*
+ * David Beers
+ * Course: CNT 4714 - Spring 2024
+ * Assignment title: Project 1 - An Event-driven Enterprise Simulation
+ * Date: Sunday, January 28, 2024
+ */
 package beerspurchasingapp;
 
 import javafx.util.converter.DateTimeStringConverter;

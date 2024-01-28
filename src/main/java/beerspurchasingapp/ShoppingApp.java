@@ -1,3 +1,9 @@
+/*
+ * David Beers
+ * Course: CNT 4714 - Spring 2024
+ * Assignment title: Project 1 - An Event-driven Enterprise Simulation
+ * Date: Sunday, January 28, 2024
+ */
 package beerspurchasingapp;
 
 import javafx.application.Application;
@@ -5,8 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.Dialog;
-import java.io.IOException;
 import java.util.Objects;
 
 public class ShoppingApp extends Application {
@@ -15,7 +19,6 @@ public class ShoppingApp extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        //initDialogs();
         // setting the main scene
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("purchasing-app-main.fxml")));
 
