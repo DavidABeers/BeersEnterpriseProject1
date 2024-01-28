@@ -87,65 +87,37 @@ public class HandlerActions {
         return time;
     }
 
+    public String readableTime(LocalDateTime transactionTime){
+        String amPM = "AM EST";
+        int hour = transactionTime.getHour();
+        if(hour>=12){
+            amPM = "PM EST";
+            if(hour>=13){
+                hour = hour%12;
+            }
+        }
+        return transactionTime.getMonth().toString() + " " +
+                transactionTime.getDayOfMonth() + ", " + transactionTime.getYear() + ", " +
+                hour + ":" + transactionTime.getMinute() + ":" +
+                transactionTime.getSecond() + amPM;
+    }
+
     // for writing transactions.csv
     public void writeTransaction(String[] cartItems, int qty, LocalDateTime transactionTime){
         File transactions = new File("transactions.csv");
-
-        if(!transactions.exists()){
             try {
-                if(transactions.createNewFile()){
-
                     FileWriter transactionWriter = new FileWriter(transactions);
-                    String amPM = "AM EST";
-                    int hour = transactionTime.getHour();
-                    if(hour>=12){
-                        amPM = "PM EST";
-                        if(hour>=13){
-                            hour = hour%12;
+                    String readableTime = readableTime(transactionTime);
+                    for(int i = 0; i<qty;i++){
+                        if(item!=null){
+                            transactionWriter.write(timePrepend(transactionTime));
+                            transactionWriter.write(item + ", " + readableTime + "\n");
                         }
                     }
-                    String readableTime = transactionTime.getMonth().toString() + " " +
-                            transactionTime.getDayOfMonth() + ", " + transactionTime.getYear() + ", " +
-                            hour + ":" + transactionTime.getMinute() + ":" +
-                            transactionTime.getSecond() + amPM;
-                    for(String item: cartItems){
-                        transactionWriter.write(timePrepend(transactionTime));
-                        transactionWriter.write(item + ", " + readableTime + "\n");
-                    }
-                }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
-        }
-        else{
-            FileWriter transactionWriter = null;
-            try {
-                transactionWriter = new FileWriter(transactions);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            String amPM = "AM EST";
-            int hour = transactionTime.getHour();
-            if(hour>=12){
-                amPM = "PM EST";
-                if(hour>=13){
-                    hour = hour%12;
-                }
-            }
-            String readableTime = transactionTime.getMonth().toString() + " " +
-                    transactionTime.getDayOfMonth() + ", " + transactionTime.getYear() + ", " +
-                    hour + ":" + transactionTime.getMinute() + ":" +
-                    transactionTime.getSecond() + amPM;
-            for(String item: cartItems){
-                try {
-                    transactionWriter.write(timePrepend(transactionTime));
-                    transactionWriter.write(item + ", " + readableTime + "\n");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-        }
     }
 }

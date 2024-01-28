@@ -172,7 +172,7 @@ public class ShoppingController{
                             ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
                             ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
             }
-            total+= currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()));
+            total+= currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))*Integer.parseInt(quantityText.getText());
             itemIDText.setText("");
             quantityText.setText("1");
             addToCart.setDisable(true);
@@ -187,7 +187,7 @@ public class ShoppingController{
         StringBuilder cartItems = new StringBuilder("Your Cart is empty");
         if(itemNum>1){
             cartItems = new StringBuilder(cartDescription[0]);
-            for(int i = 1;i<itemNum;i++){
+            for(int i = 1;i<itemNum-1;i++){
                 cartItems.append("\n").append(cartDescription[i]);
             }
         }
@@ -200,15 +200,20 @@ public class ShoppingController{
         dialog.showAndWait();
     }
 
-    @FXML
-    private void actionEmptyCart(){
+    public void clearUI(){
         cartItem1.setText("");
         cartItem2.setText("");
         cartItem3.setText("");
         cartItem4.setText("");
         cartItem5.setText("");
+        detailsText.setText("");
         itemNum = 1;
         updateUINumbers();
+    }
+
+    @FXML
+    private void actionEmptyCart(){
+        clearUI();
     }
 
     @FXML
@@ -219,12 +224,13 @@ public class ShoppingController{
     @FXML
     private void actionCheckout(){
         LocalDateTime transactionTime = LocalDateTime.now();
-        //ha.writeTransaction(cartDescription, itemNum-1, transactionTime);
+        ha.writeTransaction(cartDescription, itemNum-1, transactionTime);
         String cartItems = generateTransactionItems();
-        String invoice = ha.timePrepend(transactionTime) + "\n\n" + (itemNum-1) + "\n\n" + "ItemID# / Title / Price / Qty / Disc% / Your price\n\n" + cartItems +
+        String invoice = ha.readableTime(transactionTime) + "\n\n" + (itemNum-1) + "\n\n" + "ItemID# / Title / Price / Qty / Disc% / Your price\n\n" + cartItems +
                 "\n\n\nOrder subtotal: $" + priceFormatter.format(total) + "\n\nTax Rate: \t 7%\n\nTax Amount:\t$" + priceFormatter.format((total*0.07)) + "\n\nORDER TOTAL: \t$" + priceFormatter.format((total*1.07)) +
-                "Thanks for shopping with us!";
+                "\n\nThanks for shopping with us!";
         setDialog("Invoice", invoice);
         dialog.showAndWait();
+        clearUI();
     }
 }
