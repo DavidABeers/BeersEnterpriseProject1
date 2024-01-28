@@ -14,6 +14,7 @@ import beerspurchasingapp.ShoppingApp;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ShoppingController{
@@ -21,9 +22,14 @@ public class ShoppingController{
     public Label labelItemID;
     public Label labelItemQuantity;
     public Label labelItemDetails;
-    ArrayList<String> cart = new ArrayList<>();
-    ArrayList<InventoryItem> cartItems = new ArrayList<>();
+
+    public String[] cartDescription = new String[5];
+    //public String currentItemDesc;
+    InventoryItem currentItem;
+    public int itemNum = 1;
     String discount = "0%";
+
+    public float total = 0;
     @FXML
     Label cartLabel;
 
@@ -100,7 +106,7 @@ public class ShoppingController{
         }
         return priceMult;
     }
-
+    public NumberFormat priceFormatter = new DecimalFormat("#0.00");
     @FXML
     private void actionFindItem(){
         InventoryItem item = ha.getItem(itemIDText.getText());
@@ -108,13 +114,16 @@ public class ShoppingController{
             setDialog("Item Not Found", "The item you're looking for could not be found");
             dialog.showAndWait();
         }
+        else if(!item.isInStock()){
+            setDialog("Out of Stock", "We're Sorry, that item is currently out of stock");
+            dialog.showAndWait();
+        }
         else{
+            currentItem = item;
             int qty = Integer.parseInt(quantityText.getText());
             double priceMult = calculateDiscount(qty);
-            NumberFormat priceFormatter = new DecimalFormat("#0.00");
-            String itemDetails = item.getItemID() + " " + item.getItemDescription() + " " + item.getPrice() + " " + qty + " " + discount + " " + priceFormatter.format((item.getPrice()*priceMult));
-            detailsText.setText(itemDetails);
-            cart.add(itemDetails);
+            cartDescription[itemNum-1] = item.getItemID() + " " + item.getItemDescription() + " " + item.getPrice() + " " + qty + " " + discount + " " + priceFormatter.format((item.getPrice()*priceMult));
+            detailsText.setText(cartDescription[itemNum-1]);
             addToCart.setDisable(false);
             viewCart.setDisable(false);
             checkOut.setDisable(false);
@@ -122,7 +131,6 @@ public class ShoppingController{
     }
 
     public void updateUINumbers(){
-        int itemNum = cart.size()+1;
         labelItemID.setText("Item #" + itemNum + " ID");
         labelItemQuantity.setText("Item #" + itemNum + " Quantity");
         // labelItemDetails.setText("Item #" + itemNum + " Details"); only meant to update on finding a new item
@@ -131,18 +139,77 @@ public class ShoppingController{
     }
     @FXML
     private void actionAddToCart(){
-        cart.add(detailsText.getText());
-        updateUINumbers();
-        //cartItem1.setText("Item " + cart.size() + " - SKU: " + item.getItemID() + ", Desc: " + item.getItemDescription() + ", Price Ea. $" + item.getPrice() + ", Qty: " + quantityText.getText() + ", Total: $$" + calculateDiscount(Integer.parseInt(quantityText.getText())));
-        //itemIDText.setText("");
-        //quantityText.setText("");
+        if(Integer.parseInt(quantityText.getText())> currentItem.getQtyInStock()){
+            String dialogText = "we're sorry, we only have " + currentItem.getQtyInStock() + " of that item, please reduce order quantity";
+            setDialog("Insufficient Stock", dialogText);
+            dialog.showAndWait();
+        }
+        else{
+            switch(itemNum){
+                case 2:
+                    cartItem2.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
+                            ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                    break;
+                case 3:
+                    cartItem3.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
+                            ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                    break;
+                case 4:
+                    cartItem4.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
+                            ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                    break;
+                case 5:
+                    cartItem5.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
+                            ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                    findItem.setDisable(true);
+                    break;
+                default:
+                    cartItem1.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
+                            ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+            }
+            total+= currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()));
+            itemIDText.setText("");
+            quantityText.setText("1");
+            addToCart.setDisable(true);
+            cartLabel.setText(itemNum + " item(s) in cart");
+            itemNum++;
+            subtotalText.setText(priceFormatter.format(total));
+            updateUINumbers();
+        }
+    }
+
+    public String generateTransactionItems(){
+        StringBuilder cartItems = new StringBuilder("Your Cart is empty");
+        if(itemNum>1){
+            cartItems = new StringBuilder(cartDescription[0]);
+            for(int i = 1;i<itemNum;i++){
+                cartItems.append("\n").append(cartDescription[i]);
+            }
+        }
+        return cartItems.toString();
     }
 
     @FXML
-    private void actionViewCart(){}
+    private void actionViewCart(){
+        setDialog("Your Cart", generateTransactionItems());
+        dialog.showAndWait();
+    }
 
     @FXML
-    private void actionEmptyCart(){}
+    private void actionEmptyCart(){
+        cartItem1.setText("");
+        cartItem2.setText("");
+        cartItem3.setText("");
+        cartItem4.setText("");
+        cartItem5.setText("");
+        itemNum = 1;
+        updateUINumbers();
+    }
 
     @FXML
     private void actionCloseApp(){
@@ -150,5 +217,14 @@ public class ShoppingController{
     }
 
     @FXML
-    private void actionCheckout(){}
+    private void actionCheckout(){
+        LocalDateTime transactionTime = LocalDateTime.now();
+        //ha.writeTransaction(cartDescription, itemNum-1, transactionTime);
+        String cartItems = generateTransactionItems();
+        String invoice = ha.timePrepend(transactionTime) + "\n\n" + (itemNum-1) + "\n\n" + "ItemID# / Title / Price / Qty / Disc% / Your price\n\n" + cartItems +
+                "\n\n\nOrder subtotal: $" + priceFormatter.format(total) + "\n\nTax Rate: \t 7%\n\nTax Amount:\t$" + priceFormatter.format((total*0.07)) + "\n\nORDER TOTAL: \t$" + priceFormatter.format((total*1.07)) +
+                "Thanks for shopping with us!";
+        setDialog("Invoice", invoice);
+        dialog.showAndWait();
+    }
 }
