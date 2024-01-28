@@ -50,6 +50,7 @@ public class HandlerActions {
                     itemFound = true;
                 }
             }
+            inventoryReader.close();
         }
         catch (FileNotFoundException e){
             e.printStackTrace();
@@ -88,10 +89,10 @@ public class HandlerActions {
     }
 
     public String readableTime(LocalDateTime transactionTime){
-        String amPM = "AM EST";
+        String amPM = " AM EST";
         int hour = transactionTime.getHour();
         if(hour>=12){
-            amPM = "PM EST";
+            amPM = " PM EST";
             if(hour>=13){
                 hour = hour%12;
             }
@@ -106,14 +107,16 @@ public class HandlerActions {
     public void writeTransaction(String[] cartItems, int qty, LocalDateTime transactionTime){
         File transactions = new File("transactions.csv");
             try {
-                    FileWriter transactionWriter = new FileWriter(transactions);
+                    FileWriter transactionWriter = new FileWriter(transactions, true);
                     String readableTime = readableTime(transactionTime);
                     for(int i = 0; i<qty;i++){
-                        if(item!=null){
-                            transactionWriter.write(timePrepend(transactionTime));
-                            transactionWriter.write(item + ", " + readableTime + "\n");
+                        if(cartItems[i]!=null){
+                            transactionWriter.write(timePrepend(transactionTime) + ", ");
+                            transactionWriter.write(cartItems[i] + ", " + readableTime + "\n");
                         }
                     }
+                    transactionWriter.flush();
+                    transactionWriter.close();
             }
             catch (IOException e) {
                 e.printStackTrace();

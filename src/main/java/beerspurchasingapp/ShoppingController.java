@@ -122,8 +122,8 @@ public class ShoppingController{
             currentItem = item;
             int qty = Integer.parseInt(quantityText.getText());
             double priceMult = calculateDiscount(qty);
-            cartDescription[itemNum-1] = item.getItemID() + " " + item.getItemDescription() + " " + item.getPrice() + " " + qty + " " + discount + " " + priceFormatter.format((item.getPrice()*priceMult));
-            detailsText.setText(cartDescription[itemNum-1]);
+            cartDescription[itemNum-1] = item.getItemID() + " " + item.getItemDescription() + " " + item.getPrice() + " " + qty + " " + discount + " ";
+            detailsText.setText(cartDescription[itemNum-1]+priceFormatter.format((item.getPrice()*priceMult*Integer.parseInt(quantityText.getText()))));
             addToCart.setDisable(false);
             viewCart.setDisable(false);
             checkOut.setDisable(false);
@@ -149,30 +149,31 @@ public class ShoppingController{
                 case 2:
                     cartItem2.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
                             ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
-                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
                     break;
                 case 3:
                     cartItem3.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
                             ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
-                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
                     break;
                 case 4:
                     cartItem4.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
                             ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
-                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
                     break;
                 case 5:
                     cartItem5.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
                             ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
-                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
                     findItem.setDisable(true);
                     break;
                 default:
                     cartItem1.setText("Item " + itemNum + " - SKU: " + currentItem.getItemID() +
                             ", Desc: " + currentItem.getItemDescription() + ", Price Ea. $" + currentItem.getPrice() +
-                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
+                            ", Qty: " + quantityText.getText() + ", Total: $$" + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))));
             }
             total+= currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText()))*Integer.parseInt(quantityText.getText());
+            cartDescription[itemNum-1] = cartDescription[itemNum-1] + priceFormatter.format(Integer.parseInt(quantityText.getText())*currentItem.getPrice()*calculateDiscount(Integer.parseInt(quantityText.getText())));
             itemIDText.setText("");
             quantityText.setText("1");
             addToCart.setDisable(true);
