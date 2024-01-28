@@ -8,10 +8,7 @@
 package beerspurchasingapp;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import beerspurchasingapp.ShoppingApp;
 
@@ -37,6 +34,7 @@ public class ShoppingController{
     public void setDialog(String title, String content){
         dialog.setTitle(title);
         dialog.setContentText(content);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
     }
     HandlerActions ha = new HandlerActions();
     private Stage primaryStage;
@@ -90,12 +88,15 @@ public class ShoppingController{
         double priceMult = 1;
         if(qty>4 && qty<10){
             priceMult = 0.9;
+            discount = "10%";
         }
         if(qty>9 && qty<15){
             priceMult = 0.85;
+            discount = "15%";
         }
         if(qty>14){
             priceMult = 0.8;
+            discount = "20%";
         }
         return priceMult;
     }
@@ -133,8 +134,8 @@ public class ShoppingController{
         cart.add(detailsText.getText());
         updateUINumbers();
         //cartItem1.setText("Item " + cart.size() + " - SKU: " + item.getItemID() + ", Desc: " + item.getItemDescription() + ", Price Ea. $" + item.getPrice() + ", Qty: " + quantityText.getText() + ", Total: $$" + calculateDiscount(Integer.parseInt(quantityText.getText())));
-        itemIDText.setText("");
-        quantityText.setText("");
+        //itemIDText.setText("");
+        //quantityText.setText("");
     }
 
     @FXML

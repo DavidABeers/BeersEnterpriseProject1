@@ -46,7 +46,7 @@
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="594.0" prefWidth="949.0" VBox.vgrow="ALWAYS">
             <children>
                 <TextField id="fieldItemID" fx:id="itemIDText" layoutX="111.0" layoutY="40.0" prefHeight="25.0" prefWidth="337.0" />
-                <TextField id="fieldItemQuantity" fx:id="quantityText" layoutX="111.0" layoutY="76.0" prefHeight="25.0" prefWidth="337.0" />
+                <TextField id="fieldItemQuantity" fx:id="quantityText" layoutX="111.0" layoutY="76.0" prefHeight="25.0" prefWidth="337.0" text="1" />
                 <TextField id="fieldDetail" fx:id="detailsText" disable="true" layoutX="111.0" layoutY="111.0" prefHeight="25.0" prefWidth="337.0" />
                 <Label fx:id="labelItemID" layoutX="14.0" layoutY="44.0" text="Item #1 ID" />
                 <Label fx:id="labelItemQuantity" layoutX="14.0" layoutY="80.0" text="Item #1 Quantity" />
