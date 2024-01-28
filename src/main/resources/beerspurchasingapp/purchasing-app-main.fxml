@@ -48,9 +48,9 @@
                 <TextField id="fieldItemID" fx:id="itemIDText" layoutX="111.0" layoutY="40.0" prefHeight="25.0" prefWidth="337.0" />
                 <TextField id="fieldItemQuantity" fx:id="quantityText" layoutX="111.0" layoutY="76.0" prefHeight="25.0" prefWidth="337.0" />
                 <TextField id="fieldDetail" fx:id="detailsText" disable="true" layoutX="111.0" layoutY="111.0" prefHeight="25.0" prefWidth="337.0" />
-                <Label layoutX="14.0" layoutY="44.0" text="Item #1 ID" />
-                <Label layoutX="14.0" layoutY="80.0" text="Item #1 Quantity" />
-                <Label layoutX="14.0" layoutY="115.0" text="Item #1 Details" />
+                <Label fx:id="labelItemID" layoutX="14.0" layoutY="44.0" text="Item #1 ID" />
+                <Label fx:id="labelItemQuantity" layoutX="14.0" layoutY="80.0" text="Item #1 Quantity" />
+                <Label fx:id="labelItemDetails" layoutX="14.0" layoutY="115.0" text="Item #1 Details" />
                 <Button id="btnFindItem" fx:id="findItem" layoutX="475.0" layoutY="40.0" mnemonicParsing="false" onAction="#actionFindItem" prefHeight="25.0" prefWidth="125.0" text="Find Item #1" />
                 <Pane layoutX="7.0" layoutY="197.0" prefHeight="311.0" prefWidth="935.0" style="-fx-background-color: white;">
                     <effect>
@@ -72,14 +72,14 @@
                         <Font name="System Bold" size="12.0" />
                      </font></Button>
                         <TextField id="fieldCartSubtotal" fx:id="subtotalText" disable="true" layoutX="764.0" layoutY="250.0" />
-                        <Label layoutX="666.0" layoutY="254.0" text="Current Subtotal:">
+                        <Label fx:id="subtotal" layoutX="666.0" layoutY="254.0" text="Current Subtotal:">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
                     </children>
                 </Pane>
                 <Button id="btnCheckOut" fx:id="checkOut" disable="true" layoutX="601.0" layoutY="534.0" mnemonicParsing="false" onAction="#actionCheckout" prefHeight="25.0" prefWidth="215.0" text="Check Out" />
-                <Button id="btnAddToCart" fx:id="addToCart" disable="true" layoutX="475.0" layoutY="76.0" mnemonicParsing="false" onAction="#actionAddToCart" text="Add Item # 1 to Cart" />
+                <Button id="btnAddToCart" fx:id="addToCart" disable="true" layoutX="475.0" layoutY="76.0" mnemonicParsing="false" onAction="#actionAddToCart" text="Add Item #1 to Cart" />
                 <Button id="btnCloseApp" fx:id="closeApp" layoutX="131.0" layoutY="534.0" mnemonicParsing="false" onAction="#actionCloseApp" prefHeight="25.0" prefWidth="215.0" text="Exit (Close App)" />
                 <Button id="btnViewCart" fx:id="viewCart" disable="true" layoutX="475.0" layoutY="111.0" mnemonicParsing="false" onAction="#actionViewCart" prefHeight="25.0" prefWidth="125.0" text="View Cart" />
             </children>

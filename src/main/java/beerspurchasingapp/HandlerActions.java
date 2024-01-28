@@ -33,6 +33,7 @@ public class HandlerActions {
 
     public InventoryItem getItem(String itemID){
         String currentLine;
+        item.setExists(false);
         try {
             Scanner inventoryReader = new Scanner(inventory);
             boolean itemFound = false;

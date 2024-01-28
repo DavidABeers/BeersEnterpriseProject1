@@ -15,8 +15,18 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import beerspurchasingapp.ShoppingApp;
 
-public class ShoppingController{
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
+public class ShoppingController{
+    public Label subtotal;
+    public Label labelItemID;
+    public Label labelItemQuantity;
+    public Label labelItemDetails;
+    ArrayList<String> cart = new ArrayList<>();
+    ArrayList<InventoryItem> cartItems = new ArrayList<>();
+    String discount = "0%";
     @FXML
     Label cartLabel;
 
@@ -76,6 +86,20 @@ public class ShoppingController{
     @FXML
     private Button closeApp;
 
+    public double calculateDiscount(int qty){
+        double priceMult = 1;
+        if(qty>4 && qty<10){
+            priceMult = 0.9;
+        }
+        if(qty>9 && qty<15){
+            priceMult = 0.85;
+        }
+        if(qty>14){
+            priceMult = 0.8;
+        }
+        return priceMult;
+    }
+
     @FXML
     private void actionFindItem(){
         InventoryItem item = ha.getItem(itemIDText.getText());
@@ -84,16 +108,33 @@ public class ShoppingController{
             dialog.showAndWait();
         }
         else{
-            detailsText.setText(item.getItemDescription());
+            int qty = Integer.parseInt(quantityText.getText());
+            double priceMult = calculateDiscount(qty);
+            NumberFormat priceFormatter = new DecimalFormat("#0.00");
+            String itemDetails = item.getItemID() + " " + item.getItemDescription() + " " + item.getPrice() + " " + qty + " " + discount + " " + priceFormatter.format((item.getPrice()*priceMult));
+            detailsText.setText(itemDetails);
+            cart.add(itemDetails);
             addToCart.setDisable(false);
             viewCart.setDisable(false);
             checkOut.setDisable(false);
         }
     }
 
+    public void updateUINumbers(){
+        int itemNum = cart.size()+1;
+        labelItemID.setText("Item #" + itemNum + " ID");
+        labelItemQuantity.setText("Item #" + itemNum + " Quantity");
+        // labelItemDetails.setText("Item #" + itemNum + " Details"); only meant to update on finding a new item
+        addToCart.setText("Add Item #" + itemNum + " to Cart");
+        findItem.setText("Find Item #" + itemNum);
+    }
     @FXML
     private void actionAddToCart(){
-        
+        cart.add(detailsText.getText());
+        updateUINumbers();
+        //cartItem1.setText("Item " + cart.size() + " - SKU: " + item.getItemID() + ", Desc: " + item.getItemDescription() + ", Price Ea. $" + item.getPrice() + ", Qty: " + quantityText.getText() + ", Total: $$" + calculateDiscount(Integer.parseInt(quantityText.getText())));
+        itemIDText.setText("");
+        quantityText.setText("");
     }
 
     @FXML
