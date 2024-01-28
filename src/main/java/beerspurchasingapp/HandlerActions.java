@@ -19,7 +19,7 @@ public class HandlerActions {
     public InventoryItem item = new InventoryItem();
 
     public void inventoryParser(String currentLine){
-        boolean itemFound = false;
+        //boolean itemFound = false;
         item.setItemID(currentLine.substring(0, currentLine.indexOf(',')));
         currentLine = currentLine.substring(currentLine.indexOf(',')+1);
         item.setItemDescription(currentLine.substring(1, currentLine.indexOf(',')));
@@ -43,11 +43,16 @@ public class HandlerActions {
             Scanner inventoryReader = new Scanner(inventory);
             boolean itemFound = false;
             while(!itemFound){
-                currentLine = inventoryReader.nextLine();
-                if(currentLine.substring(0, currentLine.indexOf(',')).equals(itemID)){
-                    inventoryParser(currentLine);
-                    item.setExists(true);
-                    itemFound = true;
+                if(inventoryReader.hasNextLine()){
+                    currentLine = inventoryReader.nextLine();
+                    if(currentLine.substring(0, currentLine.indexOf(',')).equals(itemID)){
+                        inventoryParser(currentLine);
+                        item.setExists(true);
+                        itemFound = true;
+                    }
+                }
+                else{
+                    return item;
                 }
             }
             inventoryReader.close();

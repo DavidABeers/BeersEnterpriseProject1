@@ -109,6 +109,7 @@ public class ShoppingController{
     public NumberFormat priceFormatter = new DecimalFormat("#0.00");
     @FXML
     private void actionFindItem(){
+        discount = "0%";
         InventoryItem item = ha.getItem(itemIDText.getText());
         if(!item.exists()){
             setDialog("Item Not Found", "The item you're looking for could not be found");
@@ -208,6 +209,7 @@ public class ShoppingController{
         cartItem4.setText("");
         cartItem5.setText("");
         detailsText.setText("");
+        cartLabel.setText("Your Cart is Empty");
         itemNum = 1;
         updateUINumbers();
     }
@@ -215,6 +217,7 @@ public class ShoppingController{
     @FXML
     private void actionEmptyCart(){
         clearUI();
+        findItem.setDisable(false);
     }
 
     @FXML
@@ -232,6 +235,6 @@ public class ShoppingController{
                 "\n\nThanks for shopping with us!";
         setDialog("Invoice", invoice);
         dialog.showAndWait();
-        clearUI();
+        findItem.setDisable(true);
     }
 }
